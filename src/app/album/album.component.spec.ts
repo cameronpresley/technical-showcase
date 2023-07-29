@@ -1,21 +1,25 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { AlbumComponent } from './album.component';
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { AlbumService } from "../services/album.service";
+import { AlbumComponent } from "./album.component";
 
-describe('AlbumComponent', () => {
+describe("AlbumComponent", () => {
   let component: AlbumComponent;
   let fixture: ComponentFixture<AlbumComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [AlbumComponent]
+      imports: [HttpClientTestingModule],
+      providers: [AlbumService],
+      declarations: [AlbumComponent],
     });
     fixture = TestBed.createComponent(AlbumComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
