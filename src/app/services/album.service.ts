@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, catchError, of } from "rxjs";
-import { AppConfigService } from "../shared/appConfig.service";
+import { AppConfigService } from "../shared/app-config.service";
 import { LoggerService } from "../shared/logger.service";
 
 @Injectable({

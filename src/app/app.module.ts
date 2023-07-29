@@ -5,7 +5,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { AlbumComponent } from "./album/album.component";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { AppConfigService } from "./shared/appConfig.service";
+import { AppConfigService } from "./shared/app-config.service";
 
 @NgModule({
   declarations: [AppComponent, AlbumComponent],
