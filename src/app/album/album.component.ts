@@ -1,19 +1,25 @@
-import { Component } from '@angular/core';
-import { Album, AlbumService } from '../services/album.service';
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Subscription } from "rxjs";
+import { Album, AlbumService } from "../services/album.service";
 
 @Component({
-  selector: 'app-album',
-  templateUrl: './album.component.html',
-  styleUrls: ['./album.component.scss'],
+  selector: "app-album",
+  templateUrl: "./album.component.html",
+  styleUrls: ["./album.component.scss"],
 })
-export class AlbumComponent {
-  public thing: string;
+export class AlbumComponent implements OnInit, OnDestroy {
   public albums: Album[] = [];
-  constructor(private service: AlbumService) {
-    this.thing = service.something;
-  }
+  private albumSubscription!: Subscription;
+  constructor(private service: AlbumService) {}
 
   ngOnInit(): void {
-    this.service.getAllPhotos().subscribe((albums) => (this.albums = albums));
+    this.albumSubscription = this.service
+      .getAllPhotos()
+      .subscribe((albums) => (this.albums = albums));
+  }
+
+  ngOnDestroy(): void {
+    this.albumSubscription.unsubscribe();
+    console.log("destroyed!");
   }
 }
