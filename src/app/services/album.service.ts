@@ -11,16 +11,18 @@ export class AlbumService {
   constructor(
     private http: HttpClient,
     private logger: LoggerService,
-    private config: AppConfigService
+    private appConfigService: AppConfigService
   ) {}
 
   getAllPhotos(): Observable<Photo[]> {
-    return this.http.get<Photo[]>(this.config.getConfig().albumUrl).pipe(
-      catchError((err: any) => {
-        this.logger.log(`Failed to get photos: ${err.message}`);
-        return of([]);
-      })
-    );
+    return this.http
+      .get<Photo[]>(this.appConfigService.getConfig().albumUrl)
+      .pipe(
+        catchError((err: any) => {
+          this.logger.log(`Failed to get photos: ${err.message}`);
+          return of([]);
+        })
+      );
   }
 
   getAllAlbums(): Observable<Album[]> {
@@ -33,20 +35,24 @@ export class AlbumService {
       album.photos.push(photo);
       return acc;
     };
-    return this.http.get<Photo[]>(this.config.getConfig().albumUrl).pipe(
-      reduce((_: Album[], photos: Photo[]) => {
-        return photos.reduce(reducer, []);
-      }, []),
-      catchError((err: any) => {
-        this.logger.log(`Failed to get albums: ${err.message}`);
-        return of([]);
-      })
-    );
+    return this.http
+      .get<Photo[]>(this.appConfigService.getConfig().albumUrl)
+      .pipe(
+        reduce((_: Album[], photos: Photo[]) => {
+          return photos.reduce(reducer, []);
+        }, []),
+        catchError((err: any) => {
+          this.logger.log(`Failed to get albums: ${err.message}`);
+          return of([]);
+        })
+      );
   }
 
   getSpecificAlbum(albumId: number): Observable<Album | null> {
     return this.http
-      .get<Photo[]>(`${this.config.getConfig().albumUrl}?albumId=${albumId}`)
+      .get<Photo[]>(
+        `${this.appConfigService.getConfig().albumUrl}?albumId=${albumId}`
+      )
       .pipe(
         map((photos) => {
           if (!photos || !photos.length) {

@@ -7,9 +7,10 @@ import { AlbumComponent } from "./album/album.component";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { AppConfigService } from "./shared/app-config.service";
+import { PhotoComponent } from './photo/photo.component';
 
 @NgModule({
-  declarations: [AppComponent, AlbumComponent],
+  declarations: [AppComponent, AlbumComponent, PhotoComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
