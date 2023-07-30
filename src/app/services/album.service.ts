@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, catchError, of, reduce } from "rxjs";
+import { Observable, catchError, map, of, reduce } from "rxjs";
 import { AppConfigService } from "../shared/app-config.service";
 import { LoggerService } from "../shared/logger.service";
 
@@ -42,6 +42,27 @@ export class AlbumService {
         return of([]);
       })
     );
+  }
+
+  getSpecificAlbum(albumId: number): Observable<Album | null> {
+    return this.http
+      .get<Photo[]>(`${this.config.getConfig().albumUrl}?albumId=${albumId}`)
+      .pipe(
+        map((photos) => {
+          if (!photos || !photos.length) {
+            return null;
+          } else {
+            return {
+              albumId: albumId,
+              photos: photos,
+            };
+          }
+        }),
+        catchError((err: any) => {
+          this.logger.log(`Failed to get specific album: ${err.message}`);
+          return of(null);
+        })
+      );
   }
 }
 

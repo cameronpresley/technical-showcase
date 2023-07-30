@@ -108,6 +108,47 @@ describe("AlbumService", () => {
     });
   });
 
+  describe("When retrieving a specific album", () => {
+    const createRoute = (albumId: number) =>
+      `${appConfig.albumUrl}?albumId=${albumId}`;
+
+    it("and the request fails, then a message is logged", async () => {
+      service.getSpecificAlbum(20).subscribe((a) => {
+        expect(a).toBeFalsy();
+        expect(loggerMock.log).toHaveBeenCalledWith(
+          `Failed to get specific album: Http failure response for ${createRoute(
+            20
+          )}: 500 Internal Server Error`
+        );
+      });
+
+      const err = new ProgressEvent("");
+      httpTestingController
+        .expectOne(createRoute(20))
+        .error(err, { status: 500, statusText: "Internal Server Error" });
+    });
+
+    it("and the album doesn't exist, then null is returned", async () => {
+      service.getSpecificAlbum(100).subscribe((a) => {
+        expect(a).toBeFalsy();
+        expect(loggerMock.log).not.toHaveBeenCalled();
+      });
+
+      httpTestingController.expectOne(createRoute(100)).flush([]);
+    });
+
+    it("and the album does exist, then the value is returned", async () => {
+      service.getSpecificAlbum(100).subscribe((a) => {
+        expect(a!.albumId).toEqual(100);
+        expect(a!.photos.length).toBeGreaterThan(0);
+      });
+
+      httpTestingController
+        .expectOne(createRoute(100))
+        .flush([1, 2, 3, 4, 5].map((id) => createPhoto(100, id)));
+    });
+  });
+
   function createPhoto(albumId: number, photoId: number): Photo {
     return {
       albumId: albumId,

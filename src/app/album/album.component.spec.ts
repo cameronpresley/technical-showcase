@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { ReactiveFormsModule } from "@angular/forms";
 import { of } from "rxjs";
 import { Album, AlbumService, Photo } from "../services/album.service";
 import { AlbumComponent } from "./album.component";
@@ -13,11 +14,14 @@ describe("AlbumComponent", () => {
     mockAlbumService = jasmine.createSpyObj("AlbumService", [
       "getAllPhotos",
       "getAllAlbums",
+      "getSpecificAlbum",
     ]);
     mockAlbumService.getAllPhotos.and.returnValue(of([]));
     mockAlbumService.getAllAlbums.and.returnValue(of([]));
+    mockAlbumService.getSpecificAlbum.and.returnValue(of(null));
+
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, ReactiveFormsModule],
       providers: [
         AlbumService,
         { provide: AlbumService, useValue: mockAlbumService },
@@ -26,7 +30,7 @@ describe("AlbumComponent", () => {
     });
     fixture = TestBed.createComponent(AlbumComponent);
     component = fixture.componentInstance;
-    // fixture.detectChanges();
+    fixture.detectChanges();
   });
 
   it("should create", () => {
@@ -49,10 +53,31 @@ describe("AlbumComponent", () => {
     expect(component.albums.length).toEqual(2);
   });
 
+  describe("When searching for an album", () => {
+    it("and there's an album, then album is set", async () => {
+      const foundAlbum = createAlbum();
+      mockAlbumService.getSpecificAlbum.and.returnValue(of(foundAlbum));
+      component.specificAlbum$.subscribe((a) => {
+        expect(a).toEqual(createAlbum());
+      });
+
+      component.searchForAlbum("20");
+    });
+
+    it("and there's not an album, then the album isn't set", async () => {
+      mockAlbumService.getSpecificAlbum.and.returnValue(of(null));
+      component.specificAlbum$.subscribe((a) => {
+        expect(a).toBeNull();
+      });
+
+      component.searchForAlbum("20");
+    });
+  });
+
   function createAlbum(): Album {
     return {
       albumId: 1,
-      photos: [],
+      photos: [1, 2, 3].map(createPhoto),
     };
   }
   function createPhoto(): Photo {

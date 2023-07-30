@@ -1,11 +1,25 @@
 <h1>Welcome to Snapper!</h1>
 
 <h2>You currently have {{ albums.length }} albums to look through</h2>
-<ul>
-  <li *ngFor="let album of albums.slice(0, 10)">
-    Album {{ album.albumId }} has {{ album.photos.length }} photos
-  </li>
-  <!-- <li *ngFor="let photo of photos">
-    {{ photo.title}} - {{ photo.id}}
-  </li> -->
-</ul>
+<form>
+  <label for="album-id">Album Id: </label>
+  <input
+    #searchBox
+    id="album-id"
+    type="text"
+    (input)="searchForAlbum(searchBox.value)"
+  />
+</form>
+<div *ngIf="specificAlbum$ | async as album">
+  <h3>
+    For Album {{ album.albumId }}, you have {{ album.photos.length }} photos
+  </h3>
+  <div class="container">
+    <div *ngFor="let photo of album.photos">
+      <div class="item">
+        <img src="{{ photo.thumbnailUrl }}" />
+        <div class="description">{{ photo.title }} - {{ photo.id }}</div>
+      </div>
+    </div>
+  </div>
+</div>
