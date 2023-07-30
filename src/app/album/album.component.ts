@@ -1,5 +1,13 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Observable, Subject, Subscription, switchMap } from "rxjs";
+import {
+  Observable,
+  Subject,
+  Subscription,
+  debounceTime,
+  distinctUntilChanged,
+  switchMap,
+  tap,
+} from "rxjs";
 import { Album, AlbumService, Photo } from "../services/album.service";
 
 @Component({
@@ -11,6 +19,7 @@ export class AlbumComponent implements OnInit, OnDestroy {
   public photos: Photo[] = [];
   public albums: Album[] = [];
   public specificAlbum$!: Observable<Album | null>;
+  public loading = false;
   private searchTerm = new Subject<number>();
 
   private subscriptions: Subscription[] = [];
@@ -22,7 +31,15 @@ export class AlbumComponent implements OnInit, OnDestroy {
       this.service.getAllAlbums().subscribe((albums) => (this.albums = albums))
     );
     this.specificAlbum$ = this.searchTerm.pipe(
-      switchMap((term: number) => this.service.getSpecificAlbum(term))
+      tap(() => {
+        this.loading = true;
+      }),
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((term: number) => this.service.getSpecificAlbum(term)),
+      tap(() => {
+        this.loading = false;
+      })
     );
   }
 

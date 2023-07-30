@@ -1,6 +1,6 @@
 <h1>Welcome to Snapper!</h1>
 
-<h2>You currently have {{ albums.length }} albums to look through</h2>
+<h2>You currently have {{ albums.length }} albums to look through.</h2>
 <form>
   <label for="album-id">Album Id: </label>
   <input
@@ -10,16 +10,22 @@
     (input)="searchForAlbum(searchBox.value)"
   />
 </form>
-<div *ngIf="specificAlbum$ | async as album">
+
+<div *ngIf="loading">
+  <p>Loading...</p>
+</div>
+
+<div *ngIf="!loading && (specificAlbum$ | async) as album">
   <h3>
     For Album {{ album.albumId }}, you have {{ album.photos.length }} photos
   </h3>
   <div class="container">
     <div *ngFor="let photo of album.photos">
-      <div class="item">
-        <img src="{{ photo.thumbnailUrl }}" />
-        <div class="description">{{ photo.title }} - {{ photo.id }}</div>
-      </div>
+      <app-photo [photo]="photo"></app-photo>
     </div>
   </div>
+</div>
+
+<div *ngIf="!loading && searchBox.value && !(specificAlbum$ | async)">
+  <p>Not able to find album with id {{ searchBox.value }}</p>
 </div>
