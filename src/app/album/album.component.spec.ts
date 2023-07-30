@@ -11,8 +11,12 @@ describe("AlbumComponent", () => {
   let mockAlbumService;
 
   beforeEach(() => {
-    mockAlbumService = jasmine.createSpyObj("AlbumService", ["getAllPhotos"]);
+    mockAlbumService = jasmine.createSpyObj("AlbumService", [
+      "getAllPhotos",
+      "getAllAlbums",
+    ]);
     mockAlbumService.getAllPhotos.and.returnValue(of([]));
+    mockAlbumService.getAllAlbums.and.returnValue(of([]));
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [

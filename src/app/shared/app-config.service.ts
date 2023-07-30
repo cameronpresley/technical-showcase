@@ -6,12 +6,16 @@ import { firstValueFrom } from "rxjs";
   providedIn: "root",
 })
 export class AppConfigService {
-  config!: Config;
+  private config!: Config;
   constructor(private http: HttpClient) {}
 
   async load() {
     const sub$ = this.http.get<Config>("/assets/config.json");
     this.config = await firstValueFrom<Config>(sub$);
+  }
+
+  getConfig(): Config {
+    return this.config;
   }
 }
 
