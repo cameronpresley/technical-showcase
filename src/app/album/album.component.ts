@@ -23,6 +23,5 @@ export class AlbumComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((x) => x.unsubscribe());
-    console.log("destroyed!");
   }
 }
