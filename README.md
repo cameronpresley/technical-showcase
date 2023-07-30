@@ -1,27 +1,38 @@
-# PhotoAlbum
+# Technical Showcase
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.6.
+This repository is a technical showcase of abilities for a technical screen.
 
-## Development server
+_Requirements_
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Create either a console or a UI application that displays photo ids and titles in an album.
+The photos are available in this web service: [https://jsonplaceholder.typicode.com/photos](https://jsonplaceholder.typicode.com/photos). Photos are filtered with a query string.
 
-## Code scaffolding
+This will return photos within Album ID 3 [https://jsonplaceholder.typicode.com/photos?albumId=3](https://jsonplaceholder.typicode.com/photos?albumId=3).
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Dependencies
 
-## Build
+To build/run the application, you can do so _natively_ or _containerized_.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Running Natively
+- Make sure you have [Node 18+ LTS](https://nodejs.org/en/download) installed
 
-## Running unit tests
+To build/run the application, run the following commands in the root of the repository:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```shell
+npm install
+npm run start
+```
 
-## Running end-to-end tests
+Open your browser to [localhost:4200](http://localhost:4200) and you should see the application.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Running Containerized
+- Make sure you have [Docker](https://docs.docker.com/engine/install/) installed
 
-## Further help
+To run the application, run the following commands in the root of the repository.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```sh
+docker compose build # builds the container
+docker compose up # starts the application
+```
+
+Open your browser to [localhost:8000](http://localhost:8000) and you should see the application.
