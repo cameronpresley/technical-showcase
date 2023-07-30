@@ -1,0 +1,15 @@
+.container{
+  display: flex;
+  flex-flow: row wrap;
+  padding-top: 2rem;
+}
+
+.item{
+  flex-grow: 1;
+  padding: 2rem 2rem 2rem 2rem;
+  justify-content: center;
+}
+
+.description{
+  word-wrap: break-word;
+}
