@@ -1,6 +1,11 @@
-<h2>Albums</h2>
+<h1>Welcome to Snapper!</h1>
+
+<h2>You currently have {{ albums.length }} albums to look through</h2>
 <ul>
-  <li *ngFor="let album of albums">
-    {{ album.title}} - {{ album.id}}
+  <li *ngFor="let album of albums.slice(0, 10)">
+    Album {{ album.albumId }} has {{ album.photos.length }} photos
   </li>
+  <!-- <li *ngFor="let photo of photos">
+    {{ photo.title}} - {{ photo.id}}
+  </li> -->
 </ul>

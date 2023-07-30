@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Subscription } from "rxjs";
-import { Album, AlbumService } from "../services/album.service";
+import { Album, AlbumService, Photo } from "../services/album.service";
 
 @Component({
   selector: "app-album",
@@ -8,18 +8,20 @@ import { Album, AlbumService } from "../services/album.service";
   styleUrls: ["./album.component.scss"],
 })
 export class AlbumComponent implements OnInit, OnDestroy {
+  public photos: Photo[] = [];
   public albums: Album[] = [];
-  private albumSubscription!: Subscription;
+
+  private subscriptions: Subscription[] = [];
   constructor(private service: AlbumService) {}
 
   ngOnInit(): void {
-    this.albumSubscription = this.service
-      .getAllPhotos()
-      .subscribe((albums) => (this.albums = albums));
+    this.subscriptions.push(
+      this.service.getAllPhotos().subscribe((photos) => (this.photos = photos)),
+      this.service.getAllAlbums().subscribe((albums) => (this.albums = albums))
+    );
   }
 
   ngOnDestroy(): void {
-    this.albumSubscription.unsubscribe();
-    console.log("destroyed!");
+    this.subscriptions.forEach((x) => x.unsubscribe());
   }
 }
