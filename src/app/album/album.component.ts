@@ -8,7 +8,7 @@ import {
   switchMap,
   tap,
 } from "rxjs";
-import { Album, AlbumService, Photo } from "../services/album.service";
+import { Album, AlbumService } from "../services/album.service";
 
 @Component({
   selector: "app-album",
@@ -16,7 +16,6 @@ import { Album, AlbumService, Photo } from "../services/album.service";
   styleUrls: ["./album.component.scss"],
 })
 export class AlbumComponent implements OnInit, OnDestroy {
-  public photos: Photo[] = [];
   public albums: Album[] = [];
   public specificAlbum$!: Observable<Album | null>;
   public loading = false;
@@ -27,7 +26,6 @@ export class AlbumComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.service.getAllPhotos().subscribe((photos) => (this.photos = photos)),
       this.service.getAllAlbums().subscribe((albums) => (this.albums = albums))
     );
     this.specificAlbum$ = this.searchTerm.pipe(

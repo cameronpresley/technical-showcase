@@ -37,14 +37,6 @@ describe("AlbumComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should set photos", () => {
-    mockAlbumService.getAllPhotos.and.returnValue(
-      of([1, 2, 3, 4, 5].map((_) => createPhoto()))
-    );
-    component.ngOnInit();
-    expect(component.photos.length).toEqual(5);
-  });
-
   it("should set albums", () => {
     mockAlbumService.getAllAlbums.and.returnValue(
       of([1, 2].map((_) => createAlbum()))
