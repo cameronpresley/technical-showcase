@@ -14,17 +14,6 @@ export class AlbumService {
     private appConfigService: AppConfigService
   ) {}
 
-  getAllPhotos(): Observable<Photo[]> {
-    return this.http
-      .get<Photo[]>(this.appConfigService.getConfig().albumUrl)
-      .pipe(
-        catchError((err: any) => {
-          this.logger.log(`Failed to get photos: ${err.message}`);
-          return of([]);
-        })
-      );
-  }
-
   getAllAlbums(): Observable<Album[]> {
     const reducer = (acc: Album[], photo: Photo) => {
       let album = acc.find((x) => x.albumId === photo.albumId);
@@ -79,6 +68,7 @@ export type Photo = {
   url: string;
   thumbnailUrl: string;
 };
+
 export type Album = {
   albumId: number;
   photos: Photo[];

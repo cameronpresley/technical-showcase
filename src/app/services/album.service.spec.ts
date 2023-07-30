@@ -42,39 +42,6 @@ describe("AlbumService", () => {
     expect(service).toBeTruthy();
   });
 
-  describe("When retrieving all photos", () => {
-    it("and the request fails, then a message is logged", async () => {
-      service.getAllPhotos().subscribe((p) => {
-        expect(p.length).toEqual(0);
-        expect(loggerMock.log).toHaveBeenCalledWith(
-          "Failed to get photos: Http failure response for someUrl: 500 Internal Server Error"
-        );
-      });
-
-      const err = new ProgressEvent("Failed to get photos");
-      httpTestingController
-        .expectOne(appConfig.albumUrl)
-        .error(err, { status: 500, statusText: "Internal Server Error" });
-    });
-
-    it("and the request succeeds, then photos are returned", async () => {
-      service.getAllPhotos().subscribe((p) => {
-        expect(p.length).toEqual(1);
-        expect(p[0]).toBeTruthy();
-      });
-
-      httpTestingController.expectOne(appConfig.albumUrl).flush([
-        {
-          albumId: 1,
-          id: 1,
-          title: "someTitle",
-          url: "someUrl",
-          thumbnailUrl: "someThumbnailUrl",
-        },
-      ]);
-    });
-  });
-
   describe("When retrieving all albums", () => {
     it("and the request fails, then a message is logged", async () => {
       service.getAllAlbums().subscribe((a) => {

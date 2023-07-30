@@ -1,10 +1,16 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from "@angular/core/testing";
 
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { of } from "rxjs";
 import { Album, AlbumService, Photo } from "../services/album.service";
 import { AlbumComponent } from "./album.component";
+
 describe("AlbumComponent", () => {
   let component: AlbumComponent;
   let fixture: ComponentFixture<AlbumComponent>;
@@ -12,11 +18,10 @@ describe("AlbumComponent", () => {
 
   beforeEach(() => {
     mockAlbumService = jasmine.createSpyObj("AlbumService", [
-      "getAllPhotos",
       "getAllAlbums",
       "getSpecificAlbum",
     ]);
-    mockAlbumService.getAllPhotos.and.returnValue(of([]));
+
     mockAlbumService.getAllAlbums.and.returnValue(of([]));
     mockAlbumService.getSpecificAlbum.and.returnValue(of(null));
 
@@ -46,24 +51,28 @@ describe("AlbumComponent", () => {
   });
 
   describe("When searching for an album", () => {
-    it("and there's an album, then album is set", async () => {
+    it("and there's an album, then album is set", fakeAsync(() => {
       const foundAlbum = createAlbum();
       mockAlbumService.getSpecificAlbum.and.returnValue(of(foundAlbum));
+
       component.specificAlbum$.subscribe((a) => {
         expect(a).toEqual(createAlbum());
       });
 
       component.searchForAlbum("20");
-    });
+      tick(500);
+    }));
 
-    it("and there's not an album, then the album isn't set", async () => {
+    it("and there's not an album, then the album isn't set", fakeAsync(() => {
       mockAlbumService.getSpecificAlbum.and.returnValue(of(null));
+
       component.specificAlbum$.subscribe((a) => {
         expect(a).toBeNull();
       });
 
       component.searchForAlbum("20");
-    });
+      tick(500);
+    }));
   });
 
   function createAlbum(): Album {
